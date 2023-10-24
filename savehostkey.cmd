@@ -1,0 +1,1 @@
+echo y | C:\Scripts\Cisco\plink.exe -ssh swbackup@%1 "exit"
