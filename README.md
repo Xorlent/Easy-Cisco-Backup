@@ -23,3 +23,4 @@ In search of a simple way to schedule regular backups of Cisco switch configurat
     - Set $Authuser and $Authpass to the credentials for a switch user with "show run" permissions.
   - Open a Powershell window.
   - Run BackupCiscoSwitches.ps1
+  - Thank Simon Tatham!
