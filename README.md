@@ -2,7 +2,7 @@
 The simplest bulk Cisco IOS backup/change management tool  
 
 ### Background
-In search of a simple way to schedule regular backups of Cisco switch configurations, I found many solutions built with Powershell add-on modules, but I wanted something simple and more portable.  Beyond a Windows machine with Powershell, this tool needs only one thing: plink.exe, a free, standalone executable utility by the creator of PuTTY.
+In search of a simple way to schedule regular backups of Cisco switch configurations, I found many solutions built with PowerShell add-on modules, but I wanted something simple and more portable.  Beyond a Windows machine with PowerShell, this tool needs only one thing: plink.exe, a free, standalone executable utility by the creator of PuTTY.  No paid PowerShell modules, no TFTP server to set up and secure.
 
 ### Prerequisites
   - SSH only.  If you have Telnet enabled on your switches, please address that.
@@ -21,6 +21,6 @@ In search of a simple way to schedule regular backups of Cisco switch configurat
   - Edit BackupCiscoSwitches.ps1
     - Adjust the file paths as appropriate at the top of the file.
     - Set $Authuser and $Authpass to the credentials for a switch user with "show run" permissions.
-  - Open a Powershell window.
+  - Open a PowerShell window.
   - Run BackupCiscoSwitches.ps1
   - Thank Simon Tatham!
