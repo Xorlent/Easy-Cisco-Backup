@@ -1,7 +1,8 @@
 $WorkingDir = 'C:\Scripts\Cisco\Backups'
 $SwitchList = 'C:\Scripts\Cisco\switches.txt'
 $PlinkExe = 'C:\Scripts\Cisco\plink.exe'
-$Today = (Get-Date).ToString("yy-MM-dd") + '.txt'
+$Today = (Get-Date).ToString("yy-MM-dd")
+$TodaysBackupFolder = $WorkingDir + '\' + $Today
 $SaveHostKey = 'C:\Scripts\Cisco\savehostkey.cmd'
 
 # These will be saved as plaintext username and password!
@@ -13,6 +14,9 @@ $AuthPass = 'backuppassword'
 # If the backup directory ($WorkingDir) does not exist, create it
 if (-not(Test-Path -Path $WorkingDir -PathType Container)){New-Item -Path $WorkingDir -ItemType Directory}
 
+# Create today's backup sub-folder
+if (-not(Test-Path -Path $TodaysBackupFolder -PathType Container)){New-Item -Path $TodaysBackupFolder -ItemType Directory}
+
 # Open the switches.txt file
 $SwitchFile = Get-Content $SwitchList
 
@@ -20,7 +24,7 @@ $SwitchFile = Get-Content $SwitchList
 foreach($Switch in $SwitchFile){
     # Ensure the SSH host key has been saved/trusted
     & $SaveHostKey $Switch *> $null
-    $ConfigFile = $WorkingDir + '\' + $Switch + '_' + $Today
+    $ConfigFile = $TodaysBackupFolder + '\' + $Switch + '.txt'
     $PlinkArgs = '-ssh -batch -l ' + $AuthUser + ' -pw ' + $AuthPass + ' ' + $Switch + ' show run'
     Write-Host "Saving $Switch to $ConfigFile"
     # Execute the backup command, saving a date stamped configuration backup file
