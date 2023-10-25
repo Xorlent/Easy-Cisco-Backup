@@ -2,7 +2,7 @@
 The simplest bulk Cisco IOS backup/change management tool  
 
 ### Background
-In search of a simple way to schedule regular backups of Cisco switch configurations, I found many solutions built with Powershell add-on modules, but I wanted something simple and more portable.  This tool needs only one thing: plink.exe, a free, standalone executable utility by the creator of PuTTY.
+In search of a simple way to schedule regular backups of Cisco switch configurations, I found many solutions built with Powershell add-on modules, but I wanted something simple and more portable.  Beyond a Windows machine with Powershell, this tool needs only one thing: plink.exe, a free, standalone executable utility by the creator of PuTTY.
 
 ### Installation
   - Download the latest Easy-Cisco-Backup release.
