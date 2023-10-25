@@ -5,6 +5,9 @@ $Today = (Get-Date).ToString("yy-MM-dd")
 $TodaysBackupFolder = $WorkingDir + '\' + $Today
 $SaveHostKey = 'C:\Scripts\Cisco\savehostkey.cmd'
 
+# Set to $true if you want email reports of failed backups (configure this in VerifyCiscoBackups.ps1)
+$VerifyResults = $false
+
 # These will be saved as plaintext username and password!
 # 1. Ensure this is an account with minimal, read-only switch access
 # 2. Ensure folder permissions restrict access to this file
@@ -30,3 +33,4 @@ foreach($Switch in $SwitchFile){
     # Execute the backup command, saving a date stamped configuration backup file
     Start-Process -FilePath $PlinkExe -WorkingDirectory $WorkingDir -ArgumentList $PlinkArgs -PassThru -Wait -RedirectStandardOutput $ConfigFile
 }
+if($VerifyResults){& .\VerifyCiscoBackups.ps1}
