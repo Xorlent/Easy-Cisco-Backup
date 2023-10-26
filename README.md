@@ -25,7 +25,7 @@ In search of a simple way to schedule regular backups of Cisco switch configurat
   - Open a PowerShell window.
   - Run BackupCiscoSwitches.ps1
     - Note, this script is intended to run as frequently as once per day.
-    - Create a daily scheduled task to run this script for a hands-free config backups.
+    - Create a daily scheduled task to run this script for hands-free config backups.
   - Thank Simon Tatham!
 
 ### A note on security
