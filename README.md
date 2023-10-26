@@ -29,5 +29,5 @@ In search of a simple way to schedule regular backups of Cisco switch configurat
 ### A note on security
   - For the sake of convenience, the script will auto-accept/save the SSH key presented by the connected device.
     - This could allow for a device to assume the IP of a switch and steal authentication credentials.
-    - If you would rather not have the tool auto-accept SSH keys, just comment out the line below the following comment:
+    - If you would rather not have the tool auto-accept SSH keys, just comment out the line below the following comment:  
       ```# Ensure the SSH host key has been saved/trusted```
