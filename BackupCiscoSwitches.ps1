@@ -26,7 +26,7 @@ $SwitchFile = Get-Content $SwitchList
 # Process each line (IP) in the switches.txt file 
 foreach($Switch in $SwitchFile){
     # Ensure the SSH host key has been saved/trusted
-    & $SaveHostKey $Switch *> $null
+    & $SaveHostKey $PlinkExe $Switch *> $null
     $ConfigFile = $TodaysBackupFolder + '\' + $Switch + '.txt'
     $PlinkArgs = '-ssh -batch -l ' + $AuthUser + ' -pw ' + $AuthPass + ' ' + $Switch + ' show run'
     Write-Host "Saving $Switch to $ConfigFile"
