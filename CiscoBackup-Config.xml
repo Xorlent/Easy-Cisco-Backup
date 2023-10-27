@@ -13,10 +13,10 @@
     <password key="password" value="backuppassword"/>
   </auth>
   <logging>
-    <!-- Change value to true if you want backup failure email reports and a Failures.txt file dropped in each day's backup folder. -->
-    <verifyresults key="verifyresults" value="false"/>
-    <!-- Change value to true if you want config change email reports and a ChangeLog.txt file dropped in each day's backup folder. -->
-    <changelog key="changelog" value="false"/>
+    <!-- Change value to false if you DO NOT want backup failure email reports and a Failures.txt file dropped in each day's backup folder. -->
+    <verifyresults key="verifyresults" value="true"/>
+    <!-- Change value to false if you DO NOT want config change email reports and a ChangeLog.txt file dropped in each day's backup folder. -->
+    <changelog key="changelog" value="true"/>
   </logging>
   <smtp>
     <!-- Update/edit the values below according to your specific SMTP gateway settings.  No support for authentication at this time. -->
