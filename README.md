@@ -22,6 +22,7 @@ In search of a simple way to schedule regular backups of Cisco switch configurat
     - Adjust the file paths as appropriate at the top of the file.
     - Set $Authuser and $Authpass to the credentials for a switch user with "show run" permissions.
     - Want emailed error notifications?  Set $VerifyResults to $true and configure SMTP server settings in VerifyCiscoBackups.ps1.
+    - Want daily config change notifications?  Set $ChangeLog to $true and configure SMTP server settings in BackupChangeReport.ps1.
   - Open a PowerShell window.
   - Run BackupCiscoSwitches.ps1
     - Note, this script is intended to run as frequently as once per day.
