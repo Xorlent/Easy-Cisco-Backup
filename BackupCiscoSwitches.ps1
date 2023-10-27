@@ -7,6 +7,8 @@ $SaveHostKey = 'C:\Scripts\Cisco\savehostkey.cmd'
 
 # Set to $true if you want email reports of failed backups (configure this in VerifyCiscoBackups.ps1)
 $VerifyResults = $false
+# Set to $true if you want config change email reports and a ChangeLog.txt file dropped in each day's backup folder (configure this in BackupChangeReport.ps1)
+$ChangeLog = $false
 
 # These will be saved as plaintext username and password!
 # 1. Ensure this is an account with minimal, read-only switch access
@@ -34,3 +36,4 @@ foreach($Switch in $SwitchFile){
     Start-Process -FilePath $PlinkExe -WorkingDirectory $WorkingDir -ArgumentList $PlinkArgs -PassThru -Wait -RedirectStandardOutput $ConfigFile
 }
 if($VerifyResults){& .\VerifyCiscoBackups.ps1}
+if($ChangeLog){& .\BackupChangeReport.ps1}
