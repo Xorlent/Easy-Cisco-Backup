@@ -5,7 +5,7 @@ The simplest bulk Cisco IOS backup/configuration change management tool, with fa
 In search of a simple way to schedule regular backups of Cisco switch configurations, I found many solutions built with PowerShell add-on modules, but I wanted something simple and more portable.  Beyond a Windows machine with PowerShell, this tool needs only one thing: plink.exe, a free, standalone executable utility by the creator of PuTTY.  No installs, no paid PowerShell modules, no TFTP server to set up and secure.
 
 ### Prerequisites
-  - SSH only.  If you have Telnet enabled on your switches, please address that.
+  - SSH support only.  If you have Telnet enabled on your switches, please address that.
 
 ### Installation
   - Download the latest Easy-Cisco-Backup release.
@@ -18,15 +18,14 @@ In search of a simple way to schedule regular backups of Cisco switch configurat
 
 ### Usage
   - Edit switches.txt so it includes the management IP of each switch to back up, one per line.
-  - Edit BackupCiscoSwitches.ps1
-    - Adjust the file paths as appropriate at the top of the file.
-    - Set $Authuser and $Authpass to the credentials for a switch user with "show run" permissions.
-    - Want emailed error notifications?  Set $VerifyResults to $true and configure SMTP server settings in VerifyCiscoBackups.ps1.
-    - Want daily config change notifications?  Set $ChangeLog to $true and configure SMTP server settings in BackupChangeReport.ps1.
+  - Edit CiscoBackup-Config.xml
+    - Set file paths as appropriate
+    - Set authentication credentials for a switch user with "show run" permissions
+    - Configure SMTP server and from/to email address settings if email notifications are desired
   - Open a PowerShell window.
   - Run BackupCiscoSwitches.ps1
-    - Note, this script is intended to be run **once per day**.
-    - Create a daily scheduled task to run this script for hands-free config backups.
+    - Note, this script is intended to be run **once per day**
+    - Create a daily scheduled task to run this script for hassle-free config backup/change management
   - Thank Simon Tatham!
 
 ### A note on security
