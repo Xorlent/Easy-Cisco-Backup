@@ -1,11 +1,16 @@
-$WorkingDir = 'C:\Scripts\Cisco\Backups'
-$SwitchList = 'C:\Scripts\Cisco\switches.txt'
+$ConfigFile = '.\CiscoBackup-Config.xml'
+$ConfigParams = [xml](get-content $ConfigFile)
+
+# Initialize configuration variables from config xml file
+$WorkingDir = $ConfigParams.configuration.backups.folder.value
+$SwitchList = $ConfigParams.configuration.backups.switchlist.value
+$SMTPServer = $ConfigParams.configuration.smtp.fqdn.value
+$SMTPPort = $ConfigParams.configuration.smtp.port.value
+$FromAddress = $ConfigParams.configuration.smtp.fromemail.value
+$ToAddress = $ConfigParams.configuration.smtp.toemail.value
+
 $Today = (Get-Date).ToString("yy-MM-dd")
 $TodaysBackupFolder = $WorkingDir + '\' + $Today
-
-# Update this value for your private SMTP relay
-$SMTPServer = 'your.smtp.server.name'
-$MailTo = '<youremail@here.com>'
 
 # Verify existence of today's backup sub-folder
 if (-not(Test-Path -Path $TodaysBackupFolder -PathType Container)){
@@ -31,8 +36,11 @@ foreach($Switch in $SwitchFile){
         $FailCount++
     }
 }
+#Write the failure results to a text file in today's backup folder
+$FailFile = $TodaysBackupFolder + '\Failures.txt'
+$FailList | Out-File $FailFile
 
 # If one or more backup file looks bad or is missing, generate an email digest with the errors
 if($FailCount -gt 0){
-    Send-MailMessage -From 'Cisco Backups <NOREPLY@noreply.email>' -To $MailTo -Subject 'Cisco Switch Backup Failures' -Body $FailList -SmtpServer $SMTPServer
+    Send-MailMessage -From "Cisco Backups $FromAddress" -To $ToAddress -Subject 'Cisco Switch Backup Failures' -Body $FailList -SmtpServer $SMTPServer -Port $SMTPPort
 }

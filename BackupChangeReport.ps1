@@ -1,9 +1,13 @@
-﻿$WorkingDir = 'C:\Scripts\Cisco\Backups'
-$SwitchList = 'C:\Scripts\Cisco\switches.txt'
+﻿$ConfigFile = '.\CiscoBackup-Config.xml'
+$ConfigParams = [xml](get-content $ConfigFile)
 
-# Update this value for your private SMTP relay
-$SMTPServer = 'your.smtp.server.name'
-$MailTo = '<youremail@here.com>'
+# Initialize configuration variables from config xml file
+$WorkingDir = $ConfigParams.configuration.backups.folder.value
+$SwitchList = $ConfigParams.configuration.backups.switchlist.value
+$SMTPServer = $ConfigParams.configuration.smtp.fqdn.value
+$SMTPPort = $ConfigParams.configuration.smtp.port.value
+$FromAddress = $ConfigParams.configuration.smtp.fromemail.value
+$ToAddress = $ConfigParams.configuration.smtp.toemail.value
 
 $Today = (Get-Date).ToString("yy-MM-dd")
 $Yesterday = (Get-Date).AddDays(-1).ToString("yy-MM-dd")
@@ -73,7 +77,7 @@ $ChangeFile = $TodaysBackupFolder + '\ChangeLog.txt'
 $ChangeList | Out-File $ChangeFile
 
 # If one or more configurations changed since yesterday's backup, generate an email digest with the list
-if($ChangeCount -gt 0){
+if(($SMTPServer -ne "smtp.hostname.here") -and $ChangeCount -gt 0){
     $ChangeSubject = 'Cisco Switch Change Log - ' + $Today
-    Send-MailMessage -From 'Cisco Changes <NOREPLY@noreply.email>' -To $MailTo -Subject $ChangeSubject -Body $ChangeList -SmtpServer $SMTPServer
+    Send-MailMessage -From "Cisco Changes $FromAddress" -To $ToAddress -Subject $ChangeSubject -Body $ChangeList -SmtpServer $SMTPServer -Port $SMTPPort
 }

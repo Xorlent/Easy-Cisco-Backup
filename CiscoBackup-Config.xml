@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<configuration>
+  <backups>
+    <!-- Update/edit the values below according to the path where the backups will be saved, and where the various files are located. -->
+    <folder key="folder" value="C:\Scripts\Cisco\Backups"/>
+    <switchlist key="switchlist" value="C:\Scripts\Cisco\switches.txt"/>
+    <plink key="plink" value="C:\Scripts\Cisco\plink.exe"/>
+    <savehostkeycmd key="savehostkeycmd" value="C:\Scripts\Cisco\savehostkey.cmd"/>
+  </backups>
+  <auth>
+    <!-- # Ensure this is an account with minimal, read-only switch access.  Ensure folder permissions restrict access to this file! -->
+    <user key="user" value="backupuser"/>
+    <password key="password" value="backuppassword"/>
+  </auth>
+  <logging>
+    <!-- Change value to true if you want backup failure email reports and a Failures.txt file dropped in each day's backup folder. -->
+    <verifyresults key="verifyresults" value="false"/>
+    <!-- Change value to true if you want config change email reports and a ChangeLog.txt file dropped in each day's backup folder. -->
+    <changelog key="changelog" value="false"/>
+  </logging>
+  <smtp>
+    <!-- Update/edit the values below according to your specific SMTP gateway settings.  No support for authentication at this time. -->
+    <!-- If the default fqdn value remains, we will not attempt to send email messages. -->
+    <fqdn key="fqdn" value="smtp.hostname.here"/>
+    <port key="port" value="25"/>
+    <!-- Specify the email from and to addresses.  One value only; if you need to send to multiple recipients, use a distribution group. -->
+    <fromemail key="fromemail" value="noreply@ciscobackups.nodomain"/>
+    <toemail key="toemail" value="NOC@ciscobackups.nodomain"/>
+  </smtp>
+</configuration>

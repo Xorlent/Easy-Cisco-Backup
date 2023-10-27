@@ -1,20 +1,18 @@
-$WorkingDir = 'C:\Scripts\Cisco\Backups'
-$SwitchList = 'C:\Scripts\Cisco\switches.txt'
-$PlinkExe = 'C:\Scripts\Cisco\plink.exe'
+$ConfigFile = '.\CiscoBackup-Config.xml'
+$ConfigParams = [xml](get-content $ConfigFile)
+
+# Initialize configuration variables from config xml file
+$WorkingDir = $ConfigParams.configuration.backups.folder.value
+$SwitchList = $ConfigParams.configuration.backups.switchlist.value
+$PlinkExe = $ConfigParams.configuration.backups.plink.value
+$SaveHostKey = $ConfigParams.configuration.backups.savehostkeycmd.value
+$AuthUser = $ConfigParams.configuration.auth.user.value
+$AuthPass = $ConfigParams.configuration.auth.password.value
+$VerifyResults = $ConfigParams.configuration.logging.verifyresults.value
+$ChangeLog = $ConfigParams.configuration.logging.changelog.value
+
 $Today = (Get-Date).ToString("yy-MM-dd")
 $TodaysBackupFolder = $WorkingDir + '\' + $Today
-$SaveHostKey = 'C:\Scripts\Cisco\savehostkey.cmd'
-
-# Set to $true if you want email reports of failed backups (configure this in VerifyCiscoBackups.ps1)
-$VerifyResults = $false
-# Set to $true if you want config change email reports and a ChangeLog.txt file dropped in each day's backup folder (configure this in BackupChangeReport.ps1)
-$ChangeLog = $false
-
-# These will be saved as plaintext username and password!
-# 1. Ensure this is an account with minimal, read-only switch access
-# 2. Ensure folder permissions restrict access to this file
-$AuthUser = 'backupuser'
-$AuthPass = 'backuppassword'
 
 # If the backup directory ($WorkingDir) does not exist, create it
 if (-not(Test-Path -Path $WorkingDir -PathType Container)){New-Item -Path $WorkingDir -ItemType Directory}
@@ -35,5 +33,5 @@ foreach($Switch in $SwitchFile){
     # Execute the backup command, saving a date stamped configuration backup file
     Start-Process -FilePath $PlinkExe -WorkingDirectory $WorkingDir -ArgumentList $PlinkArgs -PassThru -Wait -RedirectStandardOutput $ConfigFile
 }
-if($VerifyResults){& .\VerifyCiscoBackups.ps1}
-if($ChangeLog){& .\BackupChangeReport.ps1}
+if($VerifyResults -eq "true"){& .\VerifyCiscoBackups.ps1}
+if($ChangeLog -eq "true"){& .\BackupChangeReport.ps1}
