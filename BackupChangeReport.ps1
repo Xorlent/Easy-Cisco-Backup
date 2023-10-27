@@ -38,24 +38,24 @@ foreach($Switch in $SwitchFile){
     }
     else{
         # Purge blank lines and remove Nexus OS command execution datestamp
-        $CleanConfig1 = Get-Content $ConfigFile1 | ? { $_ }
-        $CleanConfig1 | Out-File $ConfigFile1
+        $CleanConfig1 = Get-Content $ConfigFile1
 
         foreach($configLine1 in $CleanConfig1){
             if($configLine1.contains("!Time: ")){
                 $CleanConfig1 -replace $configLine1, '' | Out-File $ConfigFile1
             }
         }
+        Get-Content $ConfigFile1 | ? { $_ } | Out-File $ConfigFile1
 
         # Purge blank lines and remove Nexus OS command execution datestamp
-        $CleanConfig2 = Get-Content $ConfigFile2 | ? { $_ }
-        $CleanConfig2 | Out-File $ConfigFile2
+        $CleanConfig2 = Get-Content $ConfigFile2
 
         foreach($configLine2 in $CleanConfig2){
             if($configLine2.contains("!Time: ")){
                 $CleanConfig2 -replace $configLine2, '' | Out-File $ConfigFile2
             }
         }
+        Get-Content $ConfigFile2 | ? { $_ } | Out-File $ConfigFile2
 
         # Now generate file hash and compare yesterday's backup with today
         $CurrentHash = Get-FileHash $ConfigFile1 -Algorithm SHA256 | Select-Object -ExpandProperty Hash
