@@ -25,7 +25,7 @@ In search of a simple way to schedule regular backups of Cisco switch configurat
     - Want daily config change notifications?  Set $ChangeLog to $true and configure SMTP server settings in BackupChangeReport.ps1.
   - Open a PowerShell window.
   - Run BackupCiscoSwitches.ps1
-    - Note, this script is intended to run as frequently as once per day.
+    - Note, this script is intended to be run **once per day**.
     - Create a daily scheduled task to run this script for hands-free config backups.
   - Thank Simon Tatham!
 
