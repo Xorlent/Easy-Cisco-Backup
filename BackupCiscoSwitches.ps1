@@ -25,13 +25,19 @@ $SwitchFile = Get-Content $SwitchList
 
 # Process each line (IP) in the switches.txt file 
 foreach($Switch in $SwitchFile){
-    # Ensure the SSH host key has been saved/trusted
-    & $SaveHostKey $PlinkExe $Switch *> $null
     $ConfigFile = $TodaysBackupFolder + '\' + $Switch + '.txt'
-    $PlinkArgs = '-ssh -batch -l ' + $AuthUser + ' -pw ' + $AuthPass + ' ' + $Switch + ' show run'
-    Write-Host "Saving $Switch to $ConfigFile"
-    # Execute the backup command, saving a date stamped configuration backup file
-    Start-Process -FilePath $PlinkExe -WorkingDirectory $WorkingDir -ArgumentList $PlinkArgs -PassThru -Wait -RedirectStandardOutput $ConfigFile
+    if (Test-Path -Path $ConfigFile -PathType Leaf){
+        Write-Host "SKIPPING: Today's backup already exists for $Switch in $ConfigFile" -ForegroundColor Yellow
+        # Backup file already exists, skip.  Could be a duplicate IP in the switch list.
+    }
+    else{ # No existing config file in backup path.  Proceed.
+        # Ensure the SSH host key has been saved/trusted
+        & $SaveHostKey $PlinkExe $Switch *> $null
+        $PlinkArgs = '-ssh -batch -l ' + $AuthUser + ' -pw ' + $AuthPass + ' ' + $Switch + ' show run'
+        Write-Host "SAVING: $Switch to $ConfigFile" -ForegroundColor Green
+        # Execute the backup command, saving a date stamped configuration backup file
+        Start-Process -FilePath $PlinkExe -WorkingDirectory $WorkingDir -ArgumentList $PlinkArgs -PassThru -Wait -RedirectStandardOutput $ConfigFile
+    }
 }
 if($VerifyResults -eq "true"){& .\VerifyCiscoBackups.ps1}
 if($ChangeLog -eq "true"){& .\BackupChangeReport.ps1}

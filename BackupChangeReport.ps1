@@ -33,29 +33,29 @@ $ChangeList = ""
 foreach($Switch in $SwitchFile){
     $ConfigFile1 = $TodaysBackupFolder + '\' + $Switch + '.txt'
     $ConfigFile2 = $YesterdaysBackupFolder + '\' + $Switch + '.txt'
-    if (-not(Test-Path -Path $ConfigFile2 -PathType Leaf)){
-        # File does not exist for yesterday's backup, skip
+    if ((-not(Test-Path -Path $ConfigFile1 -PathType Leaf)) -or (-not(Test-Path -Path $ConfigFile2 -PathType Leaf))){
+        # One of the backup files does not exist, skip
     }
     else{
         # Purge blank lines and remove Nexus OS command execution datestamp
-        $CleanConfig1 = Get-Content $ConfigFile1
+        $CleanConfig1 = Get-Content $ConfigFile1 -Encoding UTF8
 
         foreach($configLine1 in $CleanConfig1){
-            if($configLine1.contains("!Time: ")){
+            if($configLine1.contains("!Time: ") -or $configLine1.contains("!Command: show running-config")){
                 $CleanConfig1 -replace $configLine1, '' | Out-File $ConfigFile1
             }
         }
-        Get-Content $ConfigFile1 | ? { $_ } | Out-File $ConfigFile1
+        (Get-Content $ConfigFile1 | ? { $_ }) | Out-File $ConfigFile1 -Encoding UTF8
 
         # Purge blank lines and remove Nexus OS command execution datestamp
-        $CleanConfig2 = Get-Content $ConfigFile2
+        $CleanConfig2 = Get-Content $ConfigFile2 -Encoding UTF8
 
         foreach($configLine2 in $CleanConfig2){
-            if($configLine2.contains("!Time: ")){
+            if($configLine2.contains("!Time: ") -or $configLine2.contains("!Command: show running-config")){
                 $CleanConfig2 -replace $configLine2, '' | Out-File $ConfigFile2
             }
         }
-        Get-Content $ConfigFile2 | ? { $_ } | Out-File $ConfigFile2
+        (Get-Content $ConfigFile2 | ? { $_ }) | Out-File $ConfigFile2 -Encoding UTF8
 
         # Now generate file hash and compare yesterday's backup with today
         $CurrentHash = Get-FileHash $ConfigFile1 -Algorithm SHA256 | Select-Object -ExpandProperty Hash

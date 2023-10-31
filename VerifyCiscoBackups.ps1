@@ -28,11 +28,11 @@ foreach($Switch in $SwitchFile){
     $ConfigFile = $TodaysBackupFolder + '\' + $Switch + '.txt'
     $BackupData = Get-Content $ConfigFile -Raw -ErrorAction SilentlyContinue
     if($BackupData.Length -gt 1000 -and $BackupData.Contains("end")){
-        Write-Host "GOOD: $ConfigFile" -ForegroundColor Green
+        Write-Host "GOOD $ConfigFile" -ForegroundColor Green
     }
     else{
-        Write-Host "BAD: $ConfigFile" -ForegroundColor Red
-        $FailList = $FailList + "BAD: $ConfigFile" + "`r`n"
+        Write-Host "BAD $ConfigFile" -ForegroundColor Red
+        $FailList = $FailList + "BAD $ConfigFile" + "`r`n"
         $FailCount++
     }
 }
@@ -41,6 +41,6 @@ $FailFile = $TodaysBackupFolder + '\Failures.txt'
 $FailList | Out-File $FailFile
 
 # If one or more backup file looks bad or is missing, generate an email digest with the errors
-if(($SMTPServer -ne "smtp.hostname.here") -and $FailCount -gt 0){
+if($FailCount -gt 0){
     Send-MailMessage -From "Cisco Backups $FromAddress" -To $ToAddress -Subject 'Cisco Switch Backup Failures' -Body $FailList -SmtpServer $SMTPServer -Port $SMTPPort
 }
