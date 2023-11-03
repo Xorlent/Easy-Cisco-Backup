@@ -42,7 +42,7 @@ foreach($Switch in $SwitchFile){
 
         foreach($configLine1 in $CleanConfig1){
             if($configLine1.contains("!Time: ") -or $configLine1.contains("!Command: show running-config") -or $configLine1.contains("Building Configuration...")){
-                $CleanConfig1 -replace $configLine1, '' | Out-File $ConfigFile1
+                ($CleanConfig1 -replace $configLine1, '') | Out-File $ConfigFile1
             }
         }
         (Get-Content $ConfigFile1 | Where-Object {-not [string]::IsNullOrWhiteSpace($_)}) | Out-File $ConfigFile1 -Encoding UTF8
@@ -52,7 +52,7 @@ foreach($Switch in $SwitchFile){
 
         foreach($configLine2 in $CleanConfig2){
             if($configLine2.contains("!Time: ") -or $configLine2.contains("!Command: show running-config") -or $configLine2.contains("Building Configuration...")){
-                $CleanConfig2 -replace $configLine2, '' | Out-File $ConfigFile2
+                ($CleanConfig2 -replace $configLine2, '') | Out-File $ConfigFile2
             }
         }
         (Get-Content $ConfigFile2 | Where-Object {-not [string]::IsNullOrWhiteSpace($_)}) | Out-File $ConfigFile2 -Encoding UTF8
