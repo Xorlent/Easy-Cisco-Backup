@@ -33,29 +33,17 @@ $ChangeList = ""
 foreach($Switch in $SwitchFile){
     $ConfigFile1 = $TodaysBackupFolder + '\' + $Switch + '.txt'
     $ConfigFile2 = $YesterdaysBackupFolder + '\' + $Switch + '.txt'
-    if ((-not(Test-Path -Path $ConfigFile1 -PathType Leaf)) -or (-not(Test-Path -Path $ConfigFile2 -PathType Leaf))){
-        # One of the backup files does not exist, skip
+    if (-not(Test-Path -Path $ConfigFile2 -PathType Leaf) -or (-not(Test-Path -Path $ConfigFile2 -PathType Leaf))){
+        # One of the required backup files does not exist, skip
     }
     else{
-        # Purge blank lines and remove Nexus OS command execution datestamp.  Helps reduce liklihood of file hash mismatch.
-        $CleanConfig1 = Get-Content $ConfigFile1 -Encoding UTF8
+        # Purge blank lines,remove execution datestamp and other lines that might cause hash mismatch
+        $CleanConfig1 = Get-Content $ConfigFile1 -Encoding UTF8 | Where-Object {$_ -notmatch "!Time: " -and $_ -notmatch "!Command: show running-config" -and $_ -notmatch "Building configuration..."}
+        ($CleanConfig1 | Where-Object {-not [string]::IsNullOrWhiteSpace($_)}) | Out-File $ConfigFile1 -Encoding UTF8
 
-        foreach($configLine1 in $CleanConfig1){
-            if($configLine1.contains("!Time: ") -or $configLine1.contains("!Command: show running-config") -or $configLine1.contains("Building Configuration...")){
-                ($CleanConfig1 -replace $configLine1, '') | Out-File $ConfigFile1
-            }
-        }
-        (Get-Content $ConfigFile1 | Where-Object {-not [string]::IsNullOrWhiteSpace($_)}) | Out-File $ConfigFile1 -Encoding UTF8
-
-        # Purge blank lines and remove Nexus OS command execution datestamp.  Helps reduce liklihood of file hash mismatch.
-        $CleanConfig2 = Get-Content $ConfigFile2 -Encoding UTF8
-
-        foreach($configLine2 in $CleanConfig2){
-            if($configLine2.contains("!Time: ") -or $configLine2.contains("!Command: show running-config") -or $configLine2.contains("Building Configuration...")){
-                ($CleanConfig2 -replace $configLine2, '') | Out-File $ConfigFile2
-            }
-        }
-        (Get-Content $ConfigFile2 | Where-Object {-not [string]::IsNullOrWhiteSpace($_)}) | Out-File $ConfigFile2 -Encoding UTF8
+        # Purge blank lines, remove execution datestamp and other lines that might cause hash mismatch
+        $CleanConfig2 = Get-Content $ConfigFile2 -Encoding UTF8 | Where-Object {$_ -notmatch "!Time: " -and $_ -notmatch "!Command: show running-config" -and $_ -notmatch "Building configuration..."}
+        ($CleanConfig2 | Where-Object {-not [string]::IsNullOrWhiteSpace($_)}) | Out-File $ConfigFile2 -Encoding UTF8
 
         # Now generate file hash and compare yesterday's backup with today
         $CurrentHash = Get-FileHash $ConfigFile1 -Algorithm SHA256 | Select-Object -ExpandProperty Hash
