@@ -32,9 +32,11 @@ $ChangeList = ""
 
 foreach($Switch in $SwitchFile){
     $ConfigFile1 = $TodaysBackupFolder + '\' + $Switch + '.txt'
+    $ConfigData1 = Get-Content $ConfigFile1 -Raw -ErrorAction SilentlyContinue
     $ConfigFile2 = $YesterdaysBackupFolder + '\' + $Switch + '.txt'
-    if (-not(Test-Path -Path $ConfigFile2 -PathType Leaf) -or (-not(Test-Path -Path $ConfigFile2 -PathType Leaf))){
-        # One of the required backup files does not exist, skip
+    $ConfigData2 = Get-Content $ConfigFile2 -Raw -ErrorAction SilentlyContinue
+    if (-not(Test-Path -Path $ConfigFile2 -PathType Leaf) -or (-not(Test-Path -Path $ConfigFile2 -PathType Leaf)) -or ($ConfigData1.length -lt 1000) -or ($ConfigData2.length -lt 1000)){
+        # One of the required backup files does not exist or is incomplete/empty, skip
     }
     else{
         # Purge blank lines,remove execution datestamp and other lines that might cause hash mismatch
