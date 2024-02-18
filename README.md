@@ -28,10 +28,8 @@ In search of a simple way to schedule regular backups of Cisco switch configurat
     - Create a daily scheduled task to run this script for hassle-free config backup/change management
   - Thank Simon Tatham!
 
-> [!A NOTE ON SECURITY]
-> At present it is okay to include the above `#include` files in your sketch (they have no effect on the compiled code), but they will be deleted at some point in the future so please remove them from your sketches now to ensure forward compatibility with subsequent releases. 
-### A note on security
-  - For the sake of convenience, the script will auto-trust/save the SSH key presented by the connected device.
-    - This could allow for a device to assume the IP of a switch and steal authentication credentials.
-    - If you would rather not have the tool auto-trust SSH keys, just comment out the line below the following comment within BackupCiscoSwitches.ps1:  
-      ```# Ensure the SSH host key has been saved/trusted```
+> [!IMPORTANT]
+> For the sake of convenience, the script will auto-trust/save the SSH key presented by the connected device.
+  - This could allow for a device to assume the IP of a switch and steal authentication credentials.
+  - If you would rather not have the tool auto-trust SSH keys, just comment out the line below the following comment within BackupCiscoSwitches.ps1:  
+    ```# Ensure the SSH host key has been saved/trusted```
