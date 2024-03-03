@@ -12,9 +12,7 @@ In search of a simple way to schedule regular backups of Cisco switch configurat
   - Right-click the downloaded ZIP, select Properties, click Unblock" and Ok.
   - Extract the ZIP to a secure folder of your choice.  I recommend C:\Scripts\Cisco\ -- the script is configured to use this path.
     - Only admins and the service account you plan to use if scheduling switch backups should have access to this location.
-  - Grab the latest plink.exe utility here: [https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html](https://the.earth.li/~sgtatham/putty/latest/w64/plink.exe)
-  - Right-click plink.exe, select Properties, click Unblock" and Ok.
-  - Move plink.exe to the location where you extracted Easy-Cisco-Backup.
+  - Read and understand the PuTTY/plink.exe license and usage restrictions, found here [https://www.chiark.greenend.org.uk/~sgtatham/putty/](https://www.chiark.greenend.org.uk/~sgtatham/putty/)
 
 ### Usage
   - Edit switches.txt so it includes the management IP of each switch to back up, one per line.
